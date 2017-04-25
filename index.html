@@ -1,0 +1,779 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>PDFsquid API</title>
+
+    <style>
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight, .highlight .w {
+  color: #f8f8f2;
+  background-color: #272822;
+}
+.highlight .err {
+  color: #151515;
+  background-color: #ac4142;
+}
+.highlight .c, .highlight .cd, .highlight .cm, .highlight .c1, .highlight .cs {
+  color: #505050;
+}
+.highlight .cp {
+  color: #f4bf75;
+}
+.highlight .nt {
+  color: #f4bf75;
+}
+.highlight .o, .highlight .ow {
+  color: #d0d0d0;
+}
+.highlight .p, .highlight .pi {
+  color: #d0d0d0;
+}
+.highlight .gi {
+  color: #90a959;
+}
+.highlight .gd {
+  color: #ac4142;
+}
+.highlight .gh {
+  color: #6a9fb5;
+  background-color: #151515;
+  font-weight: bold;
+}
+.highlight .k, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kv {
+  color: #aa759f;
+}
+.highlight .kc {
+  color: #d28445;
+}
+.highlight .kt {
+  color: #d28445;
+}
+.highlight .kd {
+  color: #d28445;
+}
+.highlight .s, .highlight .sb, .highlight .sc, .highlight .sd, .highlight .s2, .highlight .sh, .highlight .sx, .highlight .s1 {
+  color: #90a959;
+}
+.highlight .sr {
+  color: #75b5aa;
+}
+.highlight .si {
+  color: #8f5536;
+}
+.highlight .se {
+  color: #8f5536;
+}
+.highlight .nn {
+  color: #f4bf75;
+}
+.highlight .nc {
+  color: #f4bf75;
+}
+.highlight .no {
+  color: #f4bf75;
+}
+.highlight .na {
+  color: #6a9fb5;
+}
+.highlight .m, .highlight .mf, .highlight .mh, .highlight .mi, .highlight .il, .highlight .mo, .highlight .mb, .highlight .mx {
+  color: #90a959;
+}
+.highlight .ss {
+  color: #90a959;
+}
+    </style>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all.js"></script>
+  </head>
+
+  <body class="index" data-languages="[&quot;curl&quot;,&quot;php&quot;]">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" />
+      </span>
+    </a>
+    <div class="tocify-wrapper">
+      <img src="images/logo.png" />
+        <div class="lang-selector">
+              <a href="#" data-language-name="curl">curl</a>
+              <a href="#" data-language-name="php">php</a>
+        </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Szukaj">
+        </div>
+        <ul class="search-results"></ul>
+      <div id="toc">
+      </div>
+        <ul class="toc-footer">
+            <li><a href='https://github.com/pdfsquid'>PDFsquid Libraries</a></li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        
+          <h1 id="introduction">Introduction</h1>
+
+<p>Welcome in our API documentation! Now converting HTML to PDF or images is easy as never. In following sections you will find out how to:</p>
+
+<ul>
+<li>convert HTML code to PDF or image (jpg, png)</li>
+<li>convert any website by URL to PDF or image (jpg, png)</li>
+</ul>
+
+<p>PDFsquid allows you to explore wide range of available features:
+- custom header and footer with parameters (site/sites number)
+- watermarking (stampling and background)
+- support for javascript execution with window.status support or custom timeout (eg in JS images loading)
+- custom POST, headers and cookies propagation
+- support for basic auth
+- custom PDF metadata
+- PDF encryption and permissions management
+- asynchronous requests for massive conversion </p>
+
+          <h1 id="authentication">Authentication</h1>
+
+<p>Zone api requires authentication. You need to pass following headers</p>
+
+<table><thead>
+<tr>
+<th>Header</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>X-API-KEY</td>
+<td>string</td>
+<td>yes</td>
+<td>API key</td>
+</tr>
+<tr>
+<td>X-API-SECRET</td>
+<td>string</td>
+<td>yes</td>
+<td>API secret</td>
+</tr>
+</tbody></table>
+
+<p>Remember to keep your X-API-SECRET private!</p>
+
+<aside class="notice">
+You can access API credentials after logging to your <a href="https://panel.pdfsquid.com/">Panel</a>
+</aside>
+
+          <h1 id="convert-html-url-to-pdf">Convert HTML/URL to PDF</h1>
+
+<h3 id="api-endpoint">API endpoint</h3>
+
+<p><code class="prettyprint">POST https://[zone].pdfsquid.com/v1/[html|url]/pdf/[sync]</code></p>
+
+<table><thead>
+<tr>
+<th>Parametr</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>zone</td>
+<td>zone name associated to api access</td>
+</tr>
+<tr>
+<td>sync</td>
+<td>if passed conversion will be synchronous, asynchronous is default</td>
+</tr>
+</tbody></table>
+
+<h2 id="source-definition">Source definition</h2>
+
+<table><thead>
+<tr>
+<th>Parametr</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>url</td>
+<td>string</td>
+<td>yes*</td>
+<td>URL to website</td>
+</tr>
+<tr>
+<td>html</td>
+<td>string</td>
+<td>yes*</td>
+<td>HTML source</td>
+</tr>
+</tbody></table>
+
+<ul>
+<li>means that one of the two (<code class="prettyprint">url</code>, <code class="prettyprint">html</code>) is required </li>
+</ul>
+
+<h2 id="metadata-options">Metadata options</h2>
+
+<table><thead>
+<tr>
+<th>Parametr</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>title</td>
+<td>string (0:64)</td>
+<td>no</td>
+<td>PDF title</td>
+</tr>
+<tr>
+<td>subject</td>
+<td>string (0:128)</td>
+<td>no</td>
+<td>PDF subject</td>
+</tr>
+<tr>
+<td>author</td>
+<td>string (0:64)</td>
+<td>no</td>
+<td>PDF author</td>
+</tr>
+<tr>
+<td>creator</td>
+<td>string (0:64)</td>
+<td>no</td>
+<td>PDF creator</td>
+</tr>
+<tr>
+<td>producer</td>
+<td>string (0:64)</td>
+<td>no</td>
+<td>PDF producer</td>
+</tr>
+<tr>
+<td>keywords</td>
+<td>string (0:256)</td>
+<td>no</td>
+<td>PDF keywords (comma separated)</td>
+</tr>
+</tbody></table>
+
+<h2 id="pdf-options">PDF options</h2>
+
+<table><thead>
+<tr>
+<th>Parametr</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>margin-bottom</td>
+<td>integer</td>
+<td>no</td>
+<td>PDF page bottom margin (mm), default 0 mm</td>
+</tr>
+<tr>
+<td>margin-right</td>
+<td>integer</td>
+<td>no</td>
+<td>PDF page right margin (mm), default 10 mm</td>
+</tr>
+<tr>
+<td>margin-left</td>
+<td>integer</td>
+<td>no</td>
+<td>PDF page left margin (mm), default 10 mm</td>
+</tr>
+<tr>
+<td>margin-top</td>
+<td>integer</td>
+<td>no</td>
+<td>PDF page top margin (mm), default 0 mm</td>
+</tr>
+<tr>
+<td>orientation</td>
+<td>string</td>
+<td>no</td>
+<td>PDF page orientation (<code class="prettyprint">landscape</code> or <code class="prettyprint">portrait</code>)</td>
+</tr>
+<tr>
+<td>page-size</td>
+<td>string</td>
+<td>no</td>
+<td>PDF page size (<code class="prettyprint">A0</code>,<code class="prettyprint">A1</code>,etc - look at ISO 216), default is <code class="prettyprint">A4</code></td>
+</tr>
+<tr>
+<td>no-background</td>
+<td>-</td>
+<td>no</td>
+<td>Do not print PDF page background</td>
+</tr>
+<tr>
+<td>outline-depth</td>
+<td>integer</td>
+<td>no</td>
+<td>Depth of the outline. Default is 4.</td>
+</tr>
+<tr>
+<td>no-outline</td>
+<td>-</td>
+<td>no</td>
+<td>Do not put an outline into the PDF. Default outline is present.</td>
+</tr>
+<tr>
+<td>pdf-version</td>
+<td>numeric (dot separated)</td>
+<td>no</td>
+<td>Set the desired PDF version</td>
+</tr>
+</tbody></table>
+
+<h2 id="render-options">Render options</h2>
+
+<table><thead>
+<tr>
+<th>Parametr</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>disable-javascript</td>
+<td>-</td>
+<td>no</td>
+<td>Disable javascript execution, default is enabled</td>
+</tr>
+<tr>
+<td>watermark-url</td>
+<td>string</td>
+<td>no</td>
+<td>Add watermark to every page. URL should point to image. The image will be streached to page size and centered.</td>
+</tr>
+<tr>
+<td>watermark-opacity</td>
+<td>numeric (dot separated)</td>
+<td>no</td>
+<td>Transparency of the watermark, where 1 means full opaque and 0 means full transparent. Default is 0.5.</td>
+</tr>
+<tr>
+<td>watermark-position</td>
+<td>string</td>
+<td>no</td>
+<td>Set the watermark position, could be <code class="prettyprint">front</code> or <code class="prettyprint">back</code></td>
+</tr>
+<tr>
+<td>convert-forms</td>
+<td>-</td>
+<td>no</td>
+<td>Convert HTML form fields into PDF form fields. Default not converting.</td>
+</tr>
+</tbody></table>
+
+<h2 id="header-footer">Header/footer</h2>
+
+<table><thead>
+<tr>
+<th>Parametr</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>footer-html</td>
+<td>string</td>
+<td>no</td>
+<td>HTML for footer</td>
+</tr>
+<tr>
+<td>header-html</td>
+<td>string</td>
+<td>no</td>
+<td>HTML for header</td>
+</tr>
+<tr>
+<td>footer-line</td>
+<td>-</td>
+<td>no</td>
+<td>Insert line between page content and footer, default not inserting</td>
+</tr>
+<tr>
+<td>header-line</td>
+<td>-</td>
+<td>no</td>
+<td>Insert line between page content and header, default not inserting</td>
+</tr>
+<tr>
+<td>footer-spacing</td>
+<td>integer</td>
+<td>no</td>
+<td>Footer margin from page content in mm, default <code class="prettyprint">0</code></td>
+</tr>
+<tr>
+<td>header-spacing</td>
+<td>integer</td>
+<td>no</td>
+<td>Header margin from page content in mm, default <code class="prettyprint">0</code></td>
+</tr>
+<tr>
+<td>footer-without-pages</td>
+<td>string</td>
+<td>no</td>
+<td>Specify pages without footer, separated by comma</td>
+</tr>
+<tr>
+<td>header-without-pages</td>
+<td>string</td>
+<td>no</td>
+<td>Specify pages without header, separated by comma</td>
+</tr>
+</tbody></table>
+
+<aside class="notice">
+In footer-html and header-html you can use `{page}` and `{pages}` variables which will be replaced by current page and all pages respectively
+</aside>
+
+<h2 id="encryption-options">Encryption options</h2>
+
+<table><thead>
+<tr>
+<th>Parametr</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>pdf-key-length</td>
+<td>integer</td>
+<td>no</td>
+<td>Set PDF encryption key length (40, 128, 256)</td>
+</tr>
+<tr>
+<td>pdf-user-password</td>
+<td>string (0:64)</td>
+<td>no*</td>
+<td>Set user password (cannot manage permissions, strict rights access)</td>
+</tr>
+<tr>
+<td>pdf-owner-password</td>
+<td>string (0:64)</td>
+<td>no*</td>
+<td>Set owner password (full permission management)</td>
+</tr>
+<tr>
+<td>pdf-print</td>
+<td>string (yes</td>
+<td>no)</td>
+<td>no</td>
+</tr>
+<tr>
+<td>pdf-modify</td>
+<td>string (yes</td>
+<td>no)</td>
+<td>no</td>
+</tr>
+<tr>
+<td>pdf-annotate</td>
+<td>string (yes</td>
+<td>no)</td>
+<td>no</td>
+</tr>
+<tr>
+<td>pdf-modify-opt</td>
+<td>string</td>
+<td>no</td>
+<td>Set modification permissions. Values: <code class="prettyprint">all</code>,<code class="prettyprint">annotate</code> (allow comment authoring and form operations), <code class="prettyprint">form</code> (allow form field fill-in and signing), <code class="prettyprint">assembly</code> (allow document assembly only), <code class="prettyprint">none</code>. Values <code class="prettyprint">form</code> and <code class="prettyprint">assembly</code> require <code class="prettyprint">pdf-key-length</code> &gt;= <code class="prettyprint">128</code>. Default <code class="prettyprint">all</code>.</td>
+</tr>
+<tr>
+<td>pdf-extract</td>
+<td>string (yes</td>
+<td>no)</td>
+<td>no</td>
+</tr>
+<tr>
+<td>pdf-cleartext-metadata</td>
+<td>-</td>
+<td>no</td>
+<td>Prevents encryption of metadata. Default metadata is encrypted. Available if <code class="prettyprint">pdf-key-length</code> &gt;= <code class="prettyprint">128</code>.</td>
+</tr>
+</tbody></table>
+
+<ul>
+<li>If setting password both pdf-user-password and pdf-owner-password must be set</li>
+</ul>
+
+<aside class="notice">
+Specifying pdf-cleartext-metadata forces the PDF version to at least 1.5.
+If pdf-key-length is 256, the PDF version will be at least 1.6.
+</aside>
+
+<h2 id="request-propagation-authentication">Request propagation/authentication</h2>
+
+<p>Warning: This section applies to URL conversion only!</p>
+
+<table><thead>
+<tr>
+<th>Parametr</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>pass-post</td>
+<td>string-json</td>
+<td>no</td>
+<td>Key-valued json string with POST data to be passed to URL</td>
+</tr>
+<tr>
+<td>pass-headers</td>
+<td>string-json</td>
+<td>no</td>
+<td>Key-valued json string with headers data to be passed to URL. User-Agent is restricted. These headers will be propagated to every request (eg. images)!</td>
+</tr>
+<tr>
+<td>pass-cookies</td>
+<td>string-json</td>
+<td>no</td>
+<td>Key-valued json string with cookies data to be passed to URL</td>
+</tr>
+<tr>
+<td>http-user</td>
+<td>string (0:128)</td>
+<td>no</td>
+<td>Basic HTTP authentication user</td>
+</tr>
+<tr>
+<td>http-password</td>
+<td>string (0:128)</td>
+<td>no</td>
+<td>Basic HTTP authentication password</td>
+</tr>
+</tbody></table>
+
+<aside class="notice">
+Custom User-Agent in headers propagation is NOT supported
+</aside>
+
+          <h1 id="convert-html-url-to-image">Convert HTML/URL to image</h1>
+
+<h3 id="api-endpoint">API endpoint</h3>
+
+<p><code class="prettyprint">POST https://[zone].pdfsquid.com/v1/[html|url]/img/[sync]</code></p>
+
+<table><thead>
+<tr>
+<th>Parametr</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>zone</td>
+<td>zone name associated to api access</td>
+</tr>
+<tr>
+<td>sync</td>
+<td>if passed conversion will be synchronous, asynchronous is default</td>
+</tr>
+</tbody></table>
+
+<h2 id="source-definition">Source definition</h2>
+
+<table><thead>
+<tr>
+<th>Parametr</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>url</td>
+<td>string</td>
+<td>yes*</td>
+<td>URL to website</td>
+</tr>
+<tr>
+<td>html</td>
+<td>string</td>
+<td>yes*</td>
+<td>HTML source</td>
+</tr>
+</tbody></table>
+
+<ul>
+<li>means that one of the two (<code class="prettyprint">url</code>, <code class="prettyprint">html</code>) is required </li>
+</ul>
+
+<h2 id="image-format">Image format</h2>
+
+<table><thead>
+<tr>
+<th>Parametr</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>format</td>
+<td>string (jpg</td>
+<td>png)</td>
+<td>no</td>
+</tr>
+<tr>
+<td>crop-h</td>
+<td>integer</td>
+<td>no</td>
+<td>Set height for croping</td>
+</tr>
+<tr>
+<td>crop-w</td>
+<td>integer</td>
+<td>no</td>
+<td>Set width for croping</td>
+</tr>
+<tr>
+<td>crop-x</td>
+<td>integer</td>
+<td>no</td>
+<td>Set x coordinate for croping</td>
+</tr>
+<tr>
+<td>crop-y</td>
+<td>integer</td>
+<td>no</td>
+<td>Set y coordinate for croping</td>
+</tr>
+<tr>
+<td>quality</td>
+<td>integer</td>
+<td>no</td>
+<td>Output image quality (0-100), default 94</td>
+</tr>
+</tbody></table>
+
+<h2 id="render-options">Render options</h2>
+
+<table><thead>
+<tr>
+<th>Parametr</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>disable-javascript</td>
+<td>-</td>
+<td>no</td>
+<td>Disable javascript execution, default is enabled</td>
+</tr>
+<tr>
+<td>watermark-url</td>
+<td>string</td>
+<td>no</td>
+<td>Add watermark to every page. URL should point to image. The image will be streached to page size and centered.</td>
+</tr>
+<tr>
+<td>watermark-opacity</td>
+<td>numeric (dot separated)</td>
+<td>no</td>
+<td>Transparency of the watermark, where 1 means full opaque and 0 means full transparent</td>
+</tr>
+<tr>
+<td>watermark-position</td>
+<td>string</td>
+<td>no</td>
+<td>Set the watermark position, could be <code class="prettyprint">front</code> or <code class="prettyprint">back</code></td>
+</tr>
+</tbody></table>
+
+<h2 id="request-propagation-authentication">Request propagation/authentication</h2>
+
+<p>Warning: This section applies to URL convertion only!</p>
+
+<table><thead>
+<tr>
+<th>Parametr</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>pass-post</td>
+<td>string-json</td>
+<td>no</td>
+<td>Key-valued json string with POST data to be passed to URL</td>
+</tr>
+<tr>
+<td>pass-headers</td>
+<td>string-json</td>
+<td>no</td>
+<td>Key-valued json string with headers data to be passed to URL. User-Agent is restricted. These headers will be propagated to every request (eg. images)!</td>
+</tr>
+<tr>
+<td>pass-cookies</td>
+<td>string-json</td>
+<td>no</td>
+<td>Key-valued json string with cookies data to be passed to URL</td>
+</tr>
+<tr>
+<td>http-user</td>
+<td>string (0:128)</td>
+<td>no</td>
+<td>Basic HTTP authentication user</td>
+</tr>
+<tr>
+<td>http-password</td>
+<td>string (0:128)</td>
+<td>no</td>
+<td>Basic HTTP authentication password</td>
+</tr>
+</tbody></table>
+
+<aside class="notice">
+Custom User-Agent in headers propagation is NOT supported
+</aside>
+
+          <h1 id="examples">Examples</h1>
+
+<h2 id="footer-header-html">Footer/header HTML</h2>
+
+<p>This is samle footer with dynamic page evaluation. Take a notice of mandatory <code class="prettyprint">&lt;!DOCTYPE html&gt;</code>.</p>
+<pre class="highlight html"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;body</span> <span class="na">style=</span><span class="s">"text-align:center;"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;h3&gt;</span>Sample footer on page {page}/{pages}<span class="nt">&lt;/h3&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre>
+
+          <h1 id="errors">Errors</h1>
+
+<aside class="notice">Error codes</aside>
+
+      </div>
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name="curl">curl</a>
+                <a href="#" data-language-name="php">php</a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>
