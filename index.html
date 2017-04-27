@@ -91,7 +91,7 @@
       <script src="javascripts/all.js"></script>
   </head>
 
-  <body class="index" data-languages="[&quot;curl&quot;,&quot;php&quot;]">
+  <body class="index" data-languages="[]">
     <a href="#" id="nav-button">
       <span>
         NAV
@@ -100,10 +100,6 @@
     </a>
     <div class="tocify-wrapper">
       <img src="images/logo.png" />
-        <div class="lang-selector">
-              <a href="#" data-language-name="curl">curl</a>
-              <a href="#" data-language-name="php">php</a>
-        </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Szukaj">
         </div>
@@ -173,11 +169,11 @@ You can access API credentials after logging to your <a href="https://panel.pdfs
 
 <h3 id="api-endpoint">API endpoint</h3>
 
-<p><code class="prettyprint">POST https://[zone].pdfsquid.com/v1/[html|url]/pdf/[sync]</code></p>
+<p><code class="prettyprint">POST https://[zone].pdfsquid.com/v1/[input_mode]/pdf/[sync]</code></p>
 
 <table><thead>
 <tr>
-<th>Parametr</th>
+<th>Parameter</th>
 <th>Description</th>
 </tr>
 </thead><tbody>
@@ -189,13 +185,21 @@ You can access API credentials after logging to your <a href="https://panel.pdfs
 <td>sync</td>
 <td>if passed conversion will be synchronous, asynchronous is default</td>
 </tr>
+<tr>
+<td>input_mode</td>
+<td>source from where PDF will be produced. Can be <code class="prettyprint">html</code> or <code class="prettyprint">url</code></td>
+</tr>
 </tbody></table>
 
-<h2 id="source-definition">Source definition</h2>
+<p>All following parameters are supposed to be passed with POST method. For your convenience these are also grouped by functional context.</p>
+
+<h2 id="input-source">Input source</h2>
+
+<p>Set accordingly to <code class="prettyprint">input_mode</code> in API endpoint.</p>
 
 <table><thead>
 <tr>
-<th>Parametr</th>
+<th>Parameter</th>
 <th>Type</th>
 <th>Required</th>
 <th>Description</th>
@@ -216,14 +220,16 @@ You can access API credentials after logging to your <a href="https://panel.pdfs
 </tbody></table>
 
 <ul>
-<li>means that one of the two (<code class="prettyprint">url</code>, <code class="prettyprint">html</code>) is required </li>
+<li>means that one of the two (<code class="prettyprint">url</code>, <code class="prettyprint">html</code>) is required</li>
 </ul>
 
 <h2 id="metadata-options">Metadata options</h2>
 
+<p>These will be visible in document properties.</p>
+
 <table><thead>
 <tr>
-<th>Parametr</th>
+<th>Parameter</th>
 <th>Type</th>
 <th>Required</th>
 <th>Description</th>
@@ -271,7 +277,7 @@ You can access API credentials after logging to your <a href="https://panel.pdfs
 
 <table><thead>
 <tr>
-<th>Parametr</th>
+<th>Parameter</th>
 <th>Type</th>
 <th>Required</th>
 <th>Description</th>
@@ -343,7 +349,7 @@ You can access API credentials after logging to your <a href="https://panel.pdfs
 
 <table><thead>
 <tr>
-<th>Parametr</th>
+<th>Parameter</th>
 <th>Type</th>
 <th>Required</th>
 <th>Description</th>
@@ -379,13 +385,19 @@ You can access API credentials after logging to your <a href="https://panel.pdfs
 <td>no</td>
 <td>Convert HTML form fields into PDF form fields. Default not converting.</td>
 </tr>
+<tr>
+<td>viewport-size</td>
+<td>string</td>
+<td>no</td>
+<td>Emulate passed window size (eg 1366x768)</td>
+</tr>
 </tbody></table>
 
 <h2 id="header-footer">Header/footer</h2>
 
 <table><thead>
 <tr>
-<th>Parametr</th>
+<th>Parameter</th>
 <th>Type</th>
 <th>Required</th>
 <th>Description</th>
@@ -449,7 +461,7 @@ In footer-html and header-html you can use `{page}` and `{pages}` variables whic
 
 <table><thead>
 <tr>
-<th>Parametr</th>
+<th>Parameter</th>
 <th>Type</th>
 <th>Required</th>
 <th>Description</th>
@@ -526,7 +538,7 @@ If pdf-key-length is 256, the PDF version will be at least 1.6.
 
 <table><thead>
 <tr>
-<th>Parametr</th>
+<th>Parameter</th>
 <th>Type</th>
 <th>Required</th>
 <th>Description</th>
@@ -572,11 +584,11 @@ Custom User-Agent in headers propagation is NOT supported
 
 <h3 id="api-endpoint">API endpoint</h3>
 
-<p><code class="prettyprint">POST https://[zone].pdfsquid.com/v1/[html|url]/img/[sync]</code></p>
+<p><code class="prettyprint">POST https://[zone].pdfsquid.com/v1/[input_mode]/img/[sync]</code></p>
 
 <table><thead>
 <tr>
-<th>Parametr</th>
+<th>Parameter</th>
 <th>Description</th>
 </tr>
 </thead><tbody>
@@ -588,13 +600,21 @@ Custom User-Agent in headers propagation is NOT supported
 <td>sync</td>
 <td>if passed conversion will be synchronous, asynchronous is default</td>
 </tr>
+<tr>
+<td>input_mode</td>
+<td>source from where PDF will be produced. Can be <code class="prettyprint">html</code> or <code class="prettyprint">url</code></td>
+</tr>
 </tbody></table>
 
-<h2 id="source-definition">Source definition</h2>
+<p>All following parameters are supposed to be passed with POST method. For your convenience these are also grouped by functional context.</p>
+
+<h2 id="input-source">Input source</h2>
+
+<p>Set accordingly to <code class="prettyprint">input_mode</code> in API endpoint.</p>
 
 <table><thead>
 <tr>
-<th>Parametr</th>
+<th>Parameter</th>
 <th>Type</th>
 <th>Required</th>
 <th>Description</th>
@@ -615,14 +635,14 @@ Custom User-Agent in headers propagation is NOT supported
 </tbody></table>
 
 <ul>
-<li>means that one of the two (<code class="prettyprint">url</code>, <code class="prettyprint">html</code>) is required </li>
+<li>means that one of the two (<code class="prettyprint">url</code>, <code class="prettyprint">html</code>) is required</li>
 </ul>
 
 <h2 id="image-format">Image format</h2>
 
 <table><thead>
 <tr>
-<th>Parametr</th>
+<th>Parameter</th>
 <th>Type</th>
 <th>Required</th>
 <th>Description</th>
@@ -670,7 +690,7 @@ Custom User-Agent in headers propagation is NOT supported
 
 <table><thead>
 <tr>
-<th>Parametr</th>
+<th>Parameter</th>
 <th>Type</th>
 <th>Required</th>
 <th>Description</th>
@@ -700,6 +720,12 @@ Custom User-Agent in headers propagation is NOT supported
 <td>no</td>
 <td>Set the watermark position, could be <code class="prettyprint">front</code> or <code class="prettyprint">back</code></td>
 </tr>
+<tr>
+<td>viewport-size</td>
+<td>string</td>
+<td>no</td>
+<td>Emulate passed window size (eg 1366x768)</td>
+</tr>
 </tbody></table>
 
 <h2 id="request-propagation-authentication">Request propagation/authentication</h2>
@@ -708,7 +734,7 @@ Custom User-Agent in headers propagation is NOT supported
 
 <table><thead>
 <tr>
-<th>Parametr</th>
+<th>Parameter</th>
 <th>Type</th>
 <th>Required</th>
 <th>Description</th>
@@ -754,7 +780,7 @@ Custom User-Agent in headers propagation is NOT supported
 
 <h2 id="footer-header-html">Footer/header HTML</h2>
 
-<p>This is samle footer with dynamic page evaluation. Take a notice of mandatory <code class="prettyprint">&lt;!DOCTYPE html&gt;</code>.</p>
+<p>This is samle footer with dynamic page evaluation. Take notice of mandatory <code class="prettyprint">&lt;!DOCTYPE html&gt;</code>.</p>
 <pre class="highlight html"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="nt">&lt;html&gt;</span>
 <span class="nt">&lt;body</span> <span class="na">style=</span><span class="s">"text-align:center;"</span><span class="nt">&gt;</span>
@@ -763,16 +789,45 @@ Custom User-Agent in headers propagation is NOT supported
 <span class="nt">&lt;/html&gt;</span>
 </code></pre>
 
+<h2 id="page-composition">Page composition</h2>
+
+<p>PDFsquid supports page break controlling feature. In your HTML code just add any of the following css attributes:</p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Possible values</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>page-break-after</td>
+<td>auto, always, avoid</td>
+<td>Controls page break behavior after this HTML tag</td>
+</tr>
+<tr>
+<td>page-break-before</td>
+<td>auto, always, avoid</td>
+<td>Controls page break behavior before this HTML tag</td>
+</tr>
+<tr>
+<td>page-break-inside</td>
+<td>auto</td>
+<td>avoid</td>
+</tr>
+</tbody></table>
+
+<p>Example:</p>
+<pre class="highlight html"><code><span class="nt">&lt;h1&gt;</span>Page 1<span class="nt">&lt;h1&gt;</span>
+<span class="nt">&lt;h1</span> <span class="na">style=</span><span class="s">"page-break-before:always"</span><span class="nt">&gt;</span>Page 2<span class="nt">&lt;h1&gt;</span>
+</code></pre>
+
           <h1 id="errors">Errors</h1>
 
 <aside class="notice">Error codes</aside>
 
       </div>
       <div class="dark-box">
-          <div class="lang-selector">
-                <a href="#" data-language-name="curl">curl</a>
-                <a href="#" data-language-name="php">php</a>
-          </div>
       </div>
     </div>
   </body>
