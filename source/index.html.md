@@ -6,9 +6,12 @@ toc_footers:
 
 includes:
   - introduction
+  - dashboard
   - authorization
   - html2pdf
   - html2img
+  - notifications
+  - uploads
   - examples
   - errors
 

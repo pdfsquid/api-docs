@@ -2,7 +2,7 @@
 
 ## Footer/header HTML
 
-This is samle footer with dynamic page evaluation. Take notice of mandatory `<!DOCTYPE html>`.
+This is samle footer with dynamic page evaluation. Take a notice of mandatory `<!DOCTYPE html>`.
 
 ```html
 <!DOCTYPE html>
