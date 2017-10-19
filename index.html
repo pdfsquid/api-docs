@@ -123,15 +123,79 @@
 <li>convert any website by URL to PDF or image (jpg, png)</li>
 </ul>
 
-<p>PDFsquid allows you to explore wide range of available features:
-- custom header and footer with parameters (site/sites number)
-- watermarking (stampling and background)
-- support for javascript execution with window.status support or custom timeout (eg in JS images loading)
-- custom POST, headers and cookies propagation
-- support for basic auth
-- custom PDF metadata
-- PDF encryption and permissions management
-- asynchronous requests for massive conversion </p>
+<p>PDFsquid allows you to explore wide range of available features:</p>
+
+<ul>
+<li>custom header and footer with parameters (site/sites number)</li>
+<li>watermarking (stampling and background)</li>
+<li>support for javascript execution with window.status support or custom timeout (eg in JS images loading)</li>
+<li>custom POST, headers and cookies propagation</li>
+<li>support for basic auth</li>
+<li>custom PDF metadata</li>
+<li>PDF encryption and permissions management</li>
+<li>asynchronous requests for massive conversions</li>
+<li>upload done conversions to specified cloud bucket (S3, GCS)</li>
+<li>manage user access permissions to dashboard</li>
+<li>create projects</li>
+</ul>
+
+<p>In the following sections you will learn how to set up account, add new API access, cloud storage bucket, new user accesses and debug your integration.</p>
+
+          <h1 id="dashboard">Dashboard</h1>
+
+<h3 id="register">Register</h3>
+
+<p>Please register to PDFsquid if you do not have an account already.</p>
+
+<p><code class="prettyprint">https://dashboard.pdfsquid.com</code></p>
+
+<p>After verifying your email address you get access to dashboard. We will create a default project for you - starting with name <code class="prettyprint">Demo project ...</code>. You can change it in Menu-&gt;Project settings.</p>
+
+<h2 id="navigation">Navigation</h2>
+
+<p>Switch between projects with drop down selector on toolbar. Left menu navigation works in context with current selected project. Your account settings actions are hooked with the round button in top right window corner.</p>
+
+<h2 id="projects">Projects</h2>
+
+<p>Projects are isolated sets of all features - API accesses, cloud storage slots, user accesses. It also have separate billing information and invoices (on paid plans). You are administrator of at least one project which means you have full access to all features and you can eg. add new users to your project - see User management section. By default you can have two projects with administrator rights and unlimited projects as with different role - when somebody will invite you to his project. If you need more project with administrator rights please contact us with description of your needs.</p>
+
+<h2 id="user-management">User management</h2>
+
+<p>As project administrator you can add new users to your project. On the user management view click <code class="prettyprint">Add new</code> then fill in user email and desired permission role. You can select between:
+Developer - user will have access to Overview, API accesses, Cloud storage, Live debug
+Accountant - user will have access to Overview, Invoices, Reports
+You can update user role later or delete user access.</p>
+
+<h2 id="api-accesses">API accesses</h2>
+
+<p>In this view you can create, update and remove API access. In the simplest scenario you can just click <code class="prettyprint">Add new</code> and click <code class="prettyprint">Create</code>. Save generated credentials and your ready to convert documents.
+However if you decide to convert documents asynchronously you might want to fill <code class="prettyprint">Callback ping URL</code> to receive information after conversion. Check <code class="prettyprint">Ping notifications</code> section for details. You can also set up <code class="prettyprint">Storage slot</code>. Take a note these two features work in asynchronous mode only.
+Api access works only in specified zone.</p>
+
+<h2 id="cloud-storage">Cloud storage</h2>
+
+<p>In this view you can create, update and remove cloud storage slots. We support Amazon S3 and Google GCS now.
+These slots will be available in API access options. While setting up new slot we perform test upload to specified bucket to test access. Then we store credentials in encrypted storage.</p>
+
+<h2 id="invoices">Invoices</h2>
+
+<p>List of available invoices. If project is on free plan we do not issue invoice.</p>
+
+<h2 id="reports">Reports</h2>
+
+<p>Aggregated statistics about API access usage - conversions count and data transfer in specified time period.</p>
+
+<h2 id="project-settings">Project settings</h2>
+
+<p>In this view you can set up project name, select plan for project and add business entity information for invoicing.</p>
+
+<h2 id="live-debug">Live debug</h2>
+
+<p>This function works like real time API monitor. It reports all actions that have place in all APIs in current project. Useful for debug purposes especially with asynchronous conversions.</p>
+
+<h2 id="account-settings">Account settings</h2>
+
+<p>You can find this view in user menu in top right window corner. There you can set up your personal settings.</p>
 
           <h1 id="authentication">Authentication</h1>
 
@@ -776,11 +840,265 @@ Custom User-Agent in headers propagation is NOT supported
 Custom User-Agent in headers propagation is NOT supported
 </aside>
 
+          <h1 id="ping-notifications">PING notifications</h1>
+
+<p>System sends ping notifications to your system on specified <code class="prettyprint">Callback ping URL</code> after every asynchronous conversion. It is POST request and require HTTP 200-299 response to acknowledge. Any other HTTP response code will result in next trial schedule.</p>
+
+<aside class="warning">
+System starts sending notification after all scheduled stages, for example if no cloud storage was selected ping will be send after conversion. If cloud storage was selected ping will be sent after uploading (or after trials limit, see Cloud Storage section)
+</aside>
+
+<p>Notification parameters:</p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>conversion_id</td>
+<td>string (UUID)</td>
+<td>Conversion id</td>
+</tr>
+<tr>
+<td>type</td>
+<td>string (&lsquo;sync&rsquo;, &#39;async&rsquo;)</td>
+<td>Type of conversion. Currently only &#39;async&rsquo; type is supported</td>
+</tr>
+<tr>
+<td>status</td>
+<td>string (&#39;success&rsquo;, &#39;error&rsquo;)</td>
+<td>Conversion result</td>
+</tr>
+<tr>
+<td>notify_trial</td>
+<td>integer</td>
+<td>Number of ping trial. See below for timing table</td>
+</tr>
+<tr>
+<td>storage</td>
+<td>array</td>
+<td>array of storage parameters, see below</td>
+</tr>
+</tbody></table>
+
+<p>Storage parameters:</p>
+
+<p>Parameter | Type | Description |
+trial | integer | Number of ping trial. See below for timing table
+provider | string (&#39;internal&rsquo;, &#39;gcs&rsquo;, &#39;s3&rsquo;) | Cloud storage provider. <code class="prettyprint">Internal</code> means storage in zone where document is processed, <code class="prettyprint">gcs</code> is Google Cloud Storage, <code class="prettyprint">s3</code> is Amazon S3
+status | string (&#39;success&rsquo;, &#39;error&rsquo;) | Upload result
+error_code | integer | Error code of upload, see below
+error_desc | string | Description of error. Field available when Cloud Storage returns error (only in <code class="prettyprint">gcs</code> and &#39;s3&rsquo;)
+url | string | URL to converted file (only in <code class="prettyprint">gcs</code> and &#39;s3&rsquo;)
+key | string | Object storage key (only in <code class="prettyprint">gcs</code> and &#39;s3&rsquo;)</p>
+
+<p>Notification timing:</p>
+
+<table><thead>
+<tr>
+<th>Trial</th>
+<th>Time to next trial</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>- (instant)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1 min</td>
+</tr>
+<tr>
+<td>3</td>
+<td>3 min</td>
+</tr>
+<tr>
+<td>4</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>5</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>6</td>
+<td>30 min</td>
+</tr>
+<tr>
+<td>7</td>
+<td>60 min</td>
+</tr>
+<tr>
+<td>8</td>
+<td>180 min (3h)</td>
+</tr>
+<tr>
+<td>9</td>
+<td>360 min (6h)</td>
+</tr>
+<tr>
+<td>10</td>
+<td>720 min (12h)</td>
+</tr>
+<tr>
+<td>11</td>
+<td>1440 (24h)</td>
+</tr>
+</tbody></table>
+
+<p>Error codes:</p>
+
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>10</td>
+<td>Uploader temporary not available</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Cloud Storage error, description in error_desc field</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Cann not get credentials data</td>
+</tr>
+<tr>
+<td>13</td>
+<td>General uploader error</td>
+</tr>
+<tr>
+<td>14</td>
+<td>General uploader error</td>
+</tr>
+<tr>
+<td>15</td>
+<td>General uploader error</td>
+</tr>
+</tbody></table>
+
+          <h1 id="document-storage">Document storage</h1>
+
+<p>This section applies to asynchronous conversions only.</p>
+
+<p>PDFsquid supports following storage providers:</p>
+
+<ul>
+<li>Amazon S3 (s3)</li>
+<li>Google Cloud Storage (gcs)</li>
+<li>Internal</li>
+</ul>
+
+<h2 id="cloud-storage-providers">Cloud storage providers</h2>
+
+<p>For s3 and gcs storage converted files are uploaded to specified buckets defined in dashboard. You can download them after receiving ping notification or try direct download (take into account that without ping you do not really know when the file will be available). Key for object file will be:
+conversion id + &rsquo;.&rsquo; + file format (pdf, png, jpg)
+for example:
+<code class="prettyprint">43fd74e5-bee0-4bac-a356-ba57a0a6b540.pdf</code></p>
+
+<p>If any error occurs during uploading, following upload trial table applies:</p>
+
+<table><thead>
+<tr>
+<th>Trial</th>
+<th>Time to next trial</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>- (instant)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1 min</td>
+</tr>
+<tr>
+<td>3</td>
+<td>3 min</td>
+</tr>
+<tr>
+<td>4</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>5</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>6</td>
+<td>30 min</td>
+</tr>
+<tr>
+<td>7</td>
+<td>60 min</td>
+</tr>
+<tr>
+<td>8</td>
+<td>180 min (3h)</td>
+</tr>
+<tr>
+<td>9</td>
+<td>360 min (6h)</td>
+</tr>
+<tr>
+<td>10</td>
+<td>720 min (12h)</td>
+</tr>
+<tr>
+<td>11</td>
+<td>1440 (24h)</td>
+</tr>
+</tbody></table>
+
+<h2 id="internal-storage">Internal storage</h2>
+
+<p>To download file from internal storage perform following API request:</p>
+
+<p><code class="prettyprint">POST https://[zone].pdfsquid.com/v1/getfile/[conversion_id]</code></p>
+
+<p>Response headers:</p>
+
+<table><thead>
+<tr>
+<th>Header name</th>
+<th>value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>content-disposition</td>
+<td>attachment; filename=[conversion_id].[file_format]</td>
+</tr>
+<tr>
+<td>content-transfer-encoding</td>
+<td>binary</td>
+</tr>
+<tr>
+<td>content-type</td>
+<td>[according content type for file format]</td>
+</tr>
+<tr>
+<td>output-format</td>
+<td>[file_format]</td>
+</tr>
+<tr>
+<td>conversion-id</td>
+<td>[conversion_id]</td>
+</tr>
+</tbody></table>
+
+<p>File will be removed after 48 hours from conversion or after downloading.</p>
+
           <h1 id="examples">Examples</h1>
 
 <h2 id="footer-header-html">Footer/header HTML</h2>
 
-<p>This is samle footer with dynamic page evaluation. Take notice of mandatory <code class="prettyprint">&lt;!DOCTYPE html&gt;</code>.</p>
+<p>This is samle footer with dynamic page evaluation. Take a notice of mandatory <code class="prettyprint">&lt;!DOCTYPE html&gt;</code>.</p>
 <pre class="highlight html"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="nt">&lt;html&gt;</span>
 <span class="nt">&lt;body</span> <span class="na">style=</span><span class="s">"text-align:center;"</span><span class="nt">&gt;</span>
